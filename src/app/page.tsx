@@ -1,65 +1,122 @@
 import Image from "next/image";
+import Link from "next/link";
+import { PrimaryCtaRow } from "@/components/CtaButtons";
+import { MapEmbed } from "@/components/MapEmbed";
+import { ReviewSnippet } from "@/components/ReviewSnippet";
+import { Reveal } from "@/components/Reveal";
+import { SIGNATURE_DISHES, SITE } from "@/data/site";
+import { ClockIcon, MapPinIcon } from "@/components/icons";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <>
+      {/* Hero */}
+      <section className="relative flex min-h-[85vh] items-end overflow-hidden sm:min-h-[90vh]">
+        {/* Mobile crop: tightly framed on the RANMO wordmark so it survives the tall, narrow object-cover crop */}
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="/images/hero-storefront-mobile.jpg"
+          alt="Ranmo Tea Bar and Restaurant's illuminated storefront at night, with red lanterns at the entrance"
+          fill
           priority
+          sizes="100vw"
+          className="object-cover object-[center_8%] sm:hidden"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+        {/* Desktop crop: full-width banner sign + entrance. No `priority` here — mobile is the
+            primary audience per the brief, so only the mobile crop gets preloaded; this one still
+            loads promptly since it's in the initial HTML above the fold. */}
+        <Image
+          src="/images/hero-storefront.jpg"
+          alt="Ranmo Tea Bar and Restaurant's illuminated storefront at night, with red lanterns at the entrance"
+          fill
+          sizes="100vw"
+          className="hidden object-cover object-[center_12%] sm:block"
+        />
+        {/* Busier, more colorful photo than a plain backdrop — a flat tint plus a stronger bottom
+            pool keeps the headline and CTA text legible without flattening the shot entirely. */}
+        <div className="absolute inset-0 bg-charcoal/45" />
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/70 to-transparent" />
+        <div className="relative mx-auto w-full max-w-7xl px-4 pb-14 pt-32 sm:px-6 sm:pb-20 lg:px-8">
+          <Reveal>
+            <p className="font-display text-sm uppercase tracking-[0.3em] text-gold">
+              Kalutara South &middot; Lagoon-side
+            </p>
+            <h1 className="mt-3 max-w-2xl font-display text-4xl uppercase leading-[1.05] text-cream sm:text-6xl">
+              Sri Lankan tea-bar heritage, served lagoon-side.
+            </h1>
+            <p className="mt-5 max-w-xl text-base text-cream-dim sm:text-lg">
+              Ranmo Tea Bar and Restaurant sits right on the water, with a coastal railway line running
+              alongside the dining room. Mud crab, Chinese-fusion mains, and a full tea program — open every
+              day, 6:30 AM to 10:00 PM.
+            </p>
+            <PrimaryCtaRow className="mt-8" />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Signature dishes */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+        <Reveal>
+          <h2 className="font-display text-3xl uppercase tracking-wide text-gold sm:text-4xl">
+            Signature Dishes
+          </h2>
+          <p className="mt-2 max-w-2xl text-cream-dim">
+            Three reasons regulars keep coming back to Ranmo.
           </p>
+        </Reveal>
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          {SIGNATURE_DISHES.map((dish, i) => (
+            <Reveal key={dish.name} delay={i * 0.08}>
+              <Link href={dish.href} className="group block overflow-hidden rounded-2xl bg-charcoal-light">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={dish.image}
+                    alt={dish.name}
+                    fill
+                    sizes="(min-width: 640px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-5">
+                  <h3 className="font-display text-xl uppercase tracking-wide text-cream group-hover:text-gold">
+                    {dish.name}
+                  </h3>
+                  <p className="mt-2 text-sm text-cream-dim">{dish.description}</p>
+                </div>
+              </Link>
+            </Reveal>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Hours + map teaser */}
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
+        <Reveal>
+          <div className="grid gap-10 rounded-2xl border border-white/10 bg-charcoal-light p-6 sm:p-10 lg:grid-cols-2">
+            <div>
+              <h2 className="font-display text-3xl uppercase tracking-wide text-gold">Visit Us</h2>
+              <ul className="mt-6 space-y-4 text-cream-dim">
+                <li className="flex items-start gap-3">
+                  <ClockIcon className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+                  <span>{SITE.hours.display}</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+                  <span>{SITE.address.full}</span>
+                </li>
+              </ul>
+              <PrimaryCtaRow className="mt-8" />
+            </div>
+            <MapEmbed />
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Reviews */}
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
+        <Reveal>
+          <ReviewSnippet />
+        </Reveal>
+      </section>
+    </>
   );
 }
