@@ -6,7 +6,11 @@ import type { MenuCategory, MenuItem, Price, TabGroup } from "./types";
 const MENU_SHEET_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfFEbLn6-aVsdIKNf31fgnOfb5dg-9EBnzdSMIoi2g0SlJJq5rJ58w4dNyOe98AdxvkB1yzgUuVtxF/pub?gid=1608798132&single=true&output=csv";
 
-const REVALIDATE_SECONDS = 300; // 5 minutes
+// 5 minutes in production. In dev, `next: { revalidate }` opts into Next's
+// persistent Data Cache regardless of environment, so a positive value here
+// would make local sheet edits sit stale for up to REVALIDATE_SECONDS just
+// like production — 0 forces every dev request to fetch fresh.
+const REVALIDATE_SECONDS = process.env.NODE_ENV === "development" ? 0 : 300;
 
 // The sheet only carries flat "Category" names (e.g. "Bites – Beef"). Which
 // tab those group under, and any per-category display note, is site
