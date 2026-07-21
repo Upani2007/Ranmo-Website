@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MenuTabs } from "@/components/MenuTabs";
-import { MENU_ITEM_COUNT } from "@/data/menu";
+import { getMenu, getMenuItemCount } from "@/data/menu-source";
 
-export const metadata: Metadata = {
-  title: "Menu",
-  description: `The full Ranmo Tea Bar and Restaurant menu — ${MENU_ITEM_COUNT}+ dishes across mud crab, rice, noodles, seafood, pizza, pasta, and more. Prices in LKR.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const count = await getMenuItemCount();
+  return {
+    title: "Menu",
+    description: `The full Ranmo Tea Bar and Restaurant menu — ${count}+ dishes across mud crab, rice, noodles, seafood, pizza, pasta, and more. Prices in LKR.`,
+  };
+}
 
-export default function MenuPage() {
+export default async function MenuPage() {
+  const categories = await getMenu();
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -26,7 +31,7 @@ export default function MenuPage() {
       </div>
 
       <div className="mt-10">
-        <MenuTabs />
+        <MenuTabs categories={categories} />
       </div>
     </div>
   );

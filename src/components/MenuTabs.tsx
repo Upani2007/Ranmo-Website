@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MENU, SERVICE_CHARGE_NOTE } from "@/data/menu";
-import { TAB_GROUPS, TAB_GROUP_SLUGS, type TabGroup } from "@/data/types";
+import { SERVICE_CHARGE_NOTE } from "@/data/menu";
+import { TAB_GROUPS, TAB_GROUP_SLUGS, type MenuCategory, type TabGroup } from "@/data/types";
 import { MenuItemRow } from "./MenuItemRow";
 import { CrabSizeChart } from "./CrabSizeChart";
 
@@ -10,7 +10,7 @@ const SLUG_TO_TAB: Record<string, TabGroup> = Object.fromEntries(
   TAB_GROUPS.map((tab) => [TAB_GROUP_SLUGS[tab], tab])
 ) as Record<string, TabGroup>;
 
-export function MenuTabs() {
+export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
   const [active, setActive] = useState<TabGroup>(TAB_GROUPS[0]);
 
   useEffect(() => {
@@ -29,6 +29,14 @@ export function MenuTabs() {
     setActive(tab);
     const slug = TAB_GROUP_SLUGS[tab];
     history.replaceState(null, "", `#${slug}`);
+  }
+
+  if (categories.length === 0) {
+    return (
+      <p className="rounded-xl border border-white/10 bg-charcoal-lighter px-4 py-6 text-sm text-cream-dim">
+        The menu is temporarily unavailable. Please check back shortly.
+      </p>
+    );
   }
 
   return (
@@ -64,7 +72,7 @@ export function MenuTabs() {
         only the visual presentation is tabbed.
       */}
       {TAB_GROUPS.map((tab) => {
-        const categories = MENU.filter((cat) => cat.tabGroup === tab);
+        const categoriesForTab = categories.filter((cat) => cat.tabGroup === tab);
         return (
           <div
             key={tab}
@@ -75,7 +83,7 @@ export function MenuTabs() {
             className="mt-8"
           >
             {tab === "Mud Crab" && <CrabSizeChart />}
-            {categories.map((cat) => (
+            {categoriesForTab.map((cat) => (
               <div key={cat.slug} className="mb-10">
                 <h2 className="font-display text-2xl uppercase tracking-wide text-gold">{cat.boardTitle}</h2>
                 {cat.note && <p className="mt-1 text-sm italic text-cream-dim">{cat.note}</p>}

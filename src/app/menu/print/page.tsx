@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { MENU, SERVICE_CHARGE_NOTE, CRAB_SIZES } from "@/data/menu";
+import { SERVICE_CHARGE_NOTE, CRAB_SIZES } from "@/data/menu";
+import { getMenu } from "@/data/menu-source";
 import { formatLKR, formatPriceLines, hasAnyPrice } from "@/lib/formatPrice";
 import { SITE } from "@/data/site";
 import { PrintTrigger } from "./PrintTrigger";
@@ -9,7 +10,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function MenuPrintPage() {
+export default async function MenuPrintPage() {
+  const categories = await getMenu();
+
   return (
     <div className="mx-auto max-w-3xl bg-white px-6 py-10 text-black print:px-0 print:py-0">
       <PrintTrigger />
@@ -44,7 +47,13 @@ export default function MenuPrintPage() {
         </table>
       </section>
 
-      {MENU.map((cat) => (
+      {categories.length === 0 && (
+        <p className="mb-8 text-center text-sm italic text-black/70">
+          The menu is temporarily unavailable. Please check back shortly.
+        </p>
+      )}
+
+      {categories.map((cat) => (
         <section key={cat.slug} className="mb-8 break-inside-avoid">
           <h2 className="text-xl font-bold uppercase">{cat.boardTitle}</h2>
           {cat.note && <p className="text-xs italic">{cat.note}</p>}
