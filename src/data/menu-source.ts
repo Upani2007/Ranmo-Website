@@ -2,15 +2,14 @@ import "server-only";
 import type { MenuCategory, MenuItem, Price, TabGroup } from "./types";
 
 // Published Google Sheet (File > Share > Publish to web > CSV). Editing the
-// sheet updates the live site within REVALIDATE_SECONDS — no redeploy needed.
+// sheet updates the live site on the next page load — no redeploy needed.
 const MENU_SHEET_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfFEbLn6-aVsdIKNf31fgnOfb5dg-9EBnzdSMIoi2g0SlJJq5rJ58w4dNyOe98AdxvkB1yzgUuVtxF/pub?gid=1608798132&single=true&output=csv";
 
-// 5 minutes in production. In dev, `next: { revalidate }` opts into Next's
-// persistent Data Cache regardless of environment, so a positive value here
-// would make local sheet edits sit stale for up to REVALIDATE_SECONDS just
-// like production — 0 forces every dev request to fetch fresh.
-const REVALIDATE_SECONDS = process.env.NODE_ENV === "development" ? 0 : 300;
+// 0 = never cache; every page load fetches the sheet fresh, in both dev and
+// production. Trades away Next's Data Cache (and the reduced Google Sheets
+// request volume that comes with it) for menu changes always being current.
+const REVALIDATE_SECONDS = 0;
 
 // The sheet only carries flat "Category" names (e.g. "Bites – Beef"). Which
 // tab those group under, and any per-category display note, is site
@@ -140,9 +139,9 @@ function mapHeader(headerRow: string[]): Partial<Record<ColumnKey, number>> {
 
 /**
  * Fetches and parses the published menu Google Sheet into the same
- * `MenuCategory[]` shape the site renders. Revalidates every
- * `REVALIDATE_SECONDS` via Next.js's fetch cache, so sheet edits (price
- * changes, new items, `Available` toggles) show up without a redeploy.
+ * `MenuCategory[]` shape the site renders. Never cached (`REVALIDATE_SECONDS`
+ * is 0), so every page load reflects the sheet's current state — sheet edits
+ * (price changes, new items, `Available` toggles) show up without a redeploy.
  *
  * Malformed rows are skipped and logged rather than throwing, so one bad
  * row in the sheet can't take down the menu page. If the sheet can't be
