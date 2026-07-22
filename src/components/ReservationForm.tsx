@@ -32,6 +32,19 @@ export function ReservationForm() {
       if (data.success) {
         setStatus("success");
         form.reset();
+
+        fetch("/api/reservation-telegram", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formData.get("name"),
+            phone: formData.get("phone"),
+            date: formData.get("date"),
+            time: formData.get("time"),
+            party_size: formData.get("party_size"),
+            notes: formData.get("notes"),
+          }),
+        }).catch(() => {});
       } else {
         setStatus("error");
       }

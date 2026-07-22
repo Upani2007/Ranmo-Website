@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_rethrow } from "next/navigation";
 import type { MenuCategory, MenuItem, Price, TabGroup } from "./types";
 
 // Published Google Sheet (File > Share > Publish to web > CSV). Editing the
@@ -158,6 +159,11 @@ export async function getMenu(): Promise<MenuCategory[]> {
     }
     csvText = (await res.text()).replace(/^﻿/, "");
   } catch (err) {
+    // fetch(..., { next: { revalidate: 0 } }) throws Next's internal
+    // DYNAMIC_SERVER_USAGE error during a static-generation attempt to bail
+    // the route into dynamic rendering — that's a control-flow signal, not a
+    // real failure, and must propagate rather than being swallowed here.
+    unstable_rethrow(err);
     console.error("[menu] Failed to fetch menu sheet:", err);
     return [];
   }
