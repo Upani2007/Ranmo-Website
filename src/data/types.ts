@@ -22,12 +22,6 @@ export type MenuCategory = {
   items: MenuItem[];
 };
 
-export type CrabSize = {
-  label: string;
-  weightRange: string;
-  pricePer100g: number;
-};
-
 export const TAB_GROUPS = [
   "Rice & Noodles",
   "Meat & Fish",

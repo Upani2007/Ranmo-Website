@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { SERVICE_CHARGE_NOTE, CRAB_SIZES } from "@/data/menu";
+import { SERVICE_CHARGE_NOTE } from "@/data/menu";
 import { getMenu } from "@/data/menu-source";
-import { formatLKR, formatPriceLines, hasAnyPrice } from "@/lib/formatPrice";
+import { formatPriceLines, hasAnyPrice } from "@/lib/formatPrice";
 import { SITE } from "@/data/site";
 import { PrintTrigger } from "./PrintTrigger";
 
@@ -24,28 +24,6 @@ export default async function MenuPrintPage() {
           {SITE.phone.display} &middot; {SITE.hours.display}
         </p>
       </header>
-
-      <section className="mb-8 break-inside-avoid">
-        <h2 className="text-xl font-bold uppercase">Pick Your Crab</h2>
-        <table className="mt-2 w-full text-sm">
-          <thead>
-            <tr className="border-b border-black text-left">
-              <th className="py-1">Size</th>
-              <th className="py-1">Weight</th>
-              <th className="py-1 text-right">Price / 100g</th>
-            </tr>
-          </thead>
-          <tbody>
-            {CRAB_SIZES.map((s) => (
-              <tr key={s.label} className="border-b border-black/20">
-                <td className="py-1 font-semibold">{s.label}</td>
-                <td className="py-1">{s.weightRange}</td>
-                <td className="py-1 text-right">{formatLKR(s.pricePer100g)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
 
       {categories.length === 0 && (
         <p className="mb-8 text-center text-sm italic text-black/70">

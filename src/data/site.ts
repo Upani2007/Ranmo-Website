@@ -3,7 +3,7 @@ export const SITE = {
   shortName: "Ranmo",
   tagline: "Sri Lankan tea-bar heritage, served lagoon-side.",
   description:
-    "Ranmo Tea Bar and Restaurant sits on a lagoon in Kalutara South, with a coastal railway line running right alongside the dining room. Known for Sri Lankan mud crab, Chinese-fusion mains, and a full Ranmo Special Tea program.",
+    "Ranmo Tea Bar and Restaurant sits on a lagoon in Kalutara South, with a coastal railway line running right alongside the dining room. Known for Chinese-fusion mains and a full Ranmo Special Tea program.",
   address: {
     line1: "#362 Galle Road",
     line2: "Kalutara South",
@@ -41,10 +41,10 @@ export const SITE = {
 
 export const SIGNATURE_DISHES = [
   {
-    name: "Sri Lankan Mud Crab",
-    description: "Kochchi, garlic or black pepper — priced by the crab, roast paan and coconut sambol on the side.",
-    image: "/images/stock/crab-black-plate.jpg",
-    href: "/menu#mud-crab",
+    name: "Ranmo Short Eats",
+    description: "Golden-baked pastries, fresh off the tray — the go-to order for a quick bite with tea.",
+    image: "/images/stock/pastries.jpg",
+    href: "/menu#short-eats-pastries",
   },
   {
     name: "Mongolian Noodles",
@@ -104,12 +104,6 @@ export const GALLERY_IMAGES = [
     real: false,
   },
   {
-    src: "/images/stock/crab-black-plate.jpg",
-    alt: "Whole steamed crab plated with lemon (menu reference photo)",
-    category: "Food" as const,
-    real: false,
-  },
-  {
     src: "/images/stock/prawns-lobster.jpg",
     alt: "Grilled prawn in butter sauce (menu reference photo)",
     category: "Food" as const,
@@ -139,7 +133,7 @@ export const REVIEWS_PLACEHOLDER = [
   {
     author: "Google review",
     rating: 5,
-    text: "The lagoon view from the dining room is unbeatable, and the mud crab is worth the trip alone.",
+    text: "The lagoon view from the dining room is unbeatable, and the food is worth the trip alone.",
   },
   {
     author: "Google review",

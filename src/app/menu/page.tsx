@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const count = await getMenuItemCount();
   return {
     title: "Menu",
-    description: `The full Ranmo Tea Bar and Restaurant menu — ${count}+ dishes across mud crab, rice, noodles, seafood, pizza, pasta, and more. Prices in LKR.`,
+    description: `The full Ranmo Tea Bar and Restaurant menu — ${count}+ dishes across rice, noodles, seafood, pizza, pasta, and more. Prices in LKR.`,
   };
 }
 

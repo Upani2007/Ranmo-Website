@@ -45,7 +45,7 @@ export default function HomePage() {
             </h1>
             <p className="mt-5 max-w-xl text-base text-cream-dim sm:text-lg">
               Ranmo Tea Bar and Restaurant sits right on the water, with a coastal railway line running
-              alongside the dining room. Mud crab, Chinese-fusion mains, and a full tea program — open every
+              alongside the dining room. Chinese-fusion mains and a full tea program — open every
               day, 6:30 AM to 10:00 PM.
             </p>
             <PrimaryCtaRow className="mt-8" />

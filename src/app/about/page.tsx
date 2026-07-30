@@ -44,9 +44,8 @@ export default function AboutPage() {
               room.
             </p>
             <p>
-              The kitchen spans two traditions at once — Sri Lankan mud crab prepared kochchi, garlic, or
-              black pepper style, alongside Chinese-fusion mains like Mongolian noodles, fried rice, and
-              biryani. And running through all of it is the Ranmo Special Tea program, brewed the way a
+              The kitchen is built around Chinese-fusion mains — Mongolian noodles, fried rice, and biryani
+              among them. And running through all of it is the Ranmo Special Tea program, brewed the way a
               proper tea bar should.
             </p>
             <p>Open daily, 6:30 AM to 10:00 PM.</p>

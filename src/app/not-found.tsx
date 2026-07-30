@@ -7,7 +7,7 @@ export default function NotFound() {
       <p className="font-display text-sm uppercase tracking-[0.3em] text-gold">404</p>
       <h1 className="mt-2 font-display text-4xl uppercase text-cream sm:text-5xl">Page Not Found</h1>
       <p className="mt-4 text-cream-dim">
-        This page doesn&rsquo;t exist — but the mud crab does. Head back home or jump straight to the menu.
+        This page doesn&rsquo;t exist — but the menu does. Head back home or jump straight to the menu.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Link

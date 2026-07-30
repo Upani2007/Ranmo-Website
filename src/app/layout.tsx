@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   keywords: [
     "Ranmo",
     "Kalutara restaurant",
-    "Sri Lankan mud crab",
+    "Chinese-fusion Sri Lanka",
     "tea bar Kalutara",
     "Galle Road restaurant",
   ],
