@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { SERVICE_CHARGE_NOTE } from "@/data/menu";
 import { TAB_GROUPS, TAB_GROUP_SLUGS, type MenuCategory, type TabGroup } from "@/data/types";
 import { MenuItemRow } from "./MenuItemRow";
-import { CrabSizeChart } from "./CrabSizeChart";
 
 const SLUG_TO_TAB: Record<string, TabGroup> = Object.fromEntries(
   TAB_GROUPS.map((tab) => [TAB_GROUP_SLUGS[tab], tab])
@@ -15,7 +14,7 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
 
   useEffect(() => {
     // `window.location.hash` is only readable client-side; the server-rendered HTML always
-    // shows the default tab, so the hash-linked tab (e.g. /menu#mud-crab from the homepage)
+    // shows the default tab, so the hash-linked tab (e.g. /menu#rice-noodles from the homepage)
     // can only be applied post-mount. Setting state here is a deliberate one-time sync from
     // an external source (the URL), not a case of derivable render-time state.
     const hash = window.location.hash.replace("#", "");
@@ -82,7 +81,6 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
             hidden={active !== tab}
             className="mt-8"
           >
-            {tab === "Mud Crab" && <CrabSizeChart />}
             {categoriesForTab.map((cat) => (
               <div key={cat.slug} className="mb-10">
                 <h2 className="font-display text-2xl uppercase tracking-wide text-gold">{cat.boardTitle}</h2>

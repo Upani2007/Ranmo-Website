@@ -29,7 +29,6 @@ export type CrabSize = {
 };
 
 export const TAB_GROUPS = [
-  "Mud Crab",
   "Rice & Noodles",
   "Meat & Fish",
   "Starters, Soups & Seafood Bites",
@@ -45,7 +44,6 @@ export const TAB_GROUPS = [
 export type TabGroup = (typeof TAB_GROUPS)[number];
 
 export const TAB_GROUP_SLUGS: Record<TabGroup, string> = {
-  "Mud Crab": "mud-crab",
   "Rice & Noodles": "rice-noodles",
   "Meat & Fish": "meat-fish",
   "Starters, Soups & Seafood Bites": "starters-soups-seafood",
