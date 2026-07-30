@@ -54,6 +54,35 @@ export default function AboutPage() {
         </Reveal>
       </section>
 
+      <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
+        <Reveal>
+          <h2 className="font-display text-2xl uppercase tracking-wide text-gold">A Story Rooted in Tea</h2>
+          <div className="mt-6 space-y-6 text-lg leading-relaxed text-cream-dim">
+            <p>
+              Ranmo Tea Bar and Restaurant was born from a family&rsquo;s deep-rooted relationship with
+              Ceylon tea. Since 1980, Wimal Tea Distributors has sourced, graded, and distributed some of
+              Sri Lanka&rsquo;s finest single-origin black teas — hand-selected from the island&rsquo;s
+              legendary growing regions of Nuwara Eliya, Dimbula, Uva, Uda Pussellawa, Kandy, Sabaragamuwa,
+              and Ruhuna. Every leaf is tasted and graded by experienced tea tasters before it ever reaches
+              a cup, a standard of care that has shaped everything we do for over 30 years.
+            </p>
+            <p>
+              Ranmo carries that same philosophy from the tea garden to the table. What began as a tea
+              business built on quality and provenance has grown into a full dining destination — a place
+              where that same attention to sourcing and craft now extends to a menu spanning Sri Lankan
+              classics, Asian flavours, and international favourites.
+            </p>
+            <p>
+              Find us at #362 Galle Road, Kalutara South, where our dining room sits right on the
+              water&rsquo;s edge, with a coastal railway line running alongside — one of the most memorable
+              settings on the south coast to enjoy a meal. Whether you&rsquo;re here for a bowl of Mongolian
+              noodles, a plate of Kottu, or simply a proper cup of Ceylon tea made the way it should be,
+              Ranmo brings decades of tea heritage together with a kitchen built for everyone.
+            </p>
+          </div>
+        </Reveal>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
         <div className="grid gap-4 sm:grid-cols-2">
           <Reveal>
