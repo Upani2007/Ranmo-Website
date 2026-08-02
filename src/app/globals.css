@@ -42,6 +42,10 @@ body {
   background: var(--color-charcoal);
   color: var(--color-cream);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  /* The menu page's full-bleed photo breaks use a `100vw` breakout trick that
+     can overhang by a scrollbar's width; clip it here rather than in every
+     consumer. */
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {

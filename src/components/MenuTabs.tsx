@@ -4,10 +4,46 @@ import { useEffect, useState } from "react";
 import { SERVICE_CHARGE_NOTE } from "@/data/menu";
 import { TAB_GROUPS, TAB_GROUP_SLUGS, type MenuCategory, type TabGroup } from "@/data/types";
 import { MenuItemRow } from "./MenuItemRow";
+import { MenuPhotoBreak } from "./MenuPhotoBreak";
 
 const SLUG_TO_TAB: Record<string, TabGroup> = Object.fromEntries(
   TAB_GROUPS.map((tab) => [TAB_GROUP_SLUGS[tab], tab])
 ) as Record<string, TabGroup>;
+
+// Keyed by menu-category slug (not tab group or position) so a photo break
+// stays attached to its dish even if the sheet reorders categories within a
+// tab. Only categories with a strong, real photo match get one — six breaks
+// across ten tabs, not one everywhere, keeps it a restrained accent rather
+// than a wall of images. Photos are the site's existing food photography
+// (see src/data/site.ts GALLERY_IMAGES); there's no crab, dessert, or salad
+// shot in the asset set, so those tabs are left without a break rather than
+// forcing a mismatched image in.
+const CATEGORY_PHOTO_BREAKS: Record<string, { src: string; alt: string }> = {
+  noodles: {
+    src: "/images/food-fried-rice-table.jpg",
+    alt: "A plate of Ranmo's Mongolian-style noodles served at a table",
+  },
+  appetizer: {
+    src: "/images/stock/oysters.jpg",
+    alt: "Shucked oysters with tabasco and lime",
+  },
+  "side-dishes-prawns": {
+    src: "/images/stock/prawns-lobster.jpg",
+    alt: "Grilled prawn in butter sauce",
+  },
+  kottu: {
+    src: "/images/seafood-platter-fries.jpg",
+    alt: "A seafood platter with prawns, sausage and French fries",
+  },
+  snacks: {
+    src: "/images/stock/pastries.jpg",
+    alt: "Golden-baked short eats fresh off the tray at Ranmo",
+  },
+  "fresh-juice": {
+    src: "/images/drink-icedtea-table.jpg",
+    alt: "An iced tea beverage garnished with mint, served at a table inside Ranmo",
+  },
+};
 
 export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
   const [active, setActive] = useState<TabGroup>(TAB_GROUPS[0]);
@@ -81,17 +117,23 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
             hidden={active !== tab}
             className="mt-8"
           >
-            {categoriesForTab.map((cat) => (
-              <div key={cat.slug} className="mb-10">
-                <h2 className="font-display text-2xl uppercase tracking-wide text-gold">{cat.boardTitle}</h2>
-                {cat.note && <p className="mt-1 text-sm italic text-cream-dim">{cat.note}</p>}
-                <div className="mt-2">
-                  {cat.items.map((item) => (
-                    <MenuItemRow key={item.name} item={item} />
-                  ))}
+            {categoriesForTab.map((cat) => {
+              const photoBreak = CATEGORY_PHOTO_BREAKS[cat.slug];
+              return (
+                <div key={cat.slug}>
+                  <div className="mb-10">
+                    <h2 className="font-display text-2xl uppercase tracking-wide text-gold">{cat.boardTitle}</h2>
+                    {cat.note && <p className="mt-1 text-sm italic text-cream-dim">{cat.note}</p>}
+                    <div className="mt-2">
+                      {cat.items.map((item) => (
+                        <MenuItemRow key={item.name} item={item} />
+                      ))}
+                    </div>
+                  </div>
+                  {photoBreak && <MenuPhotoBreak src={photoBreak.src} alt={photoBreak.alt} />}
                 </div>
-              </div>
-            ))}
+              );
+            })}
             <p className="text-xs text-cream-dim">{SERVICE_CHARGE_NOTE}</p>
           </div>
         );
