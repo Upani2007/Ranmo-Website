@@ -4,44 +4,121 @@ import { useEffect, useState } from "react";
 import { SERVICE_CHARGE_NOTE } from "@/data/menu";
 import { TAB_GROUPS, TAB_GROUP_SLUGS, type MenuCategory, type TabGroup } from "@/data/types";
 import { MenuItemRow } from "./MenuItemRow";
-import { MenuPhotoBreak } from "./MenuPhotoBreak";
+import { MenuDishImage } from "./MenuDishImage";
 
 const SLUG_TO_TAB: Record<string, TabGroup> = Object.fromEntries(
   TAB_GROUPS.map((tab) => [TAB_GROUP_SLUGS[tab], tab])
 ) as Record<string, TabGroup>;
 
-// Keyed by menu-category slug (not tab group or position) so a photo break
-// stays attached to its dish even if the sheet reorders categories within a
-// tab. Only categories with a strong, real photo match get one — six breaks
-// across ten tabs, not one everywhere, keeps it a restrained accent rather
-// than a wall of images. Photos are the site's existing food photography
-// (see src/data/site.ts GALLERY_IMAGES); there's no crab, dessert, or salad
-// shot in the asset set, so those tabs are left without a break rather than
-// forcing a mismatched image in.
-const CATEGORY_PHOTO_BREAKS: Record<string, { src: string; alt: string }> = {
-  noodles: {
-    src: "/images/food-fried-rice-table.jpg",
-    alt: "A plate of Ranmo's Mongolian-style noodles served at a table",
+// Keyed by menu-category slug (not tab group or position) so a dish photo
+// stays attached to its category even if the sheet reorders categories
+// within a tab. Photos are real Ranmo menu-board photography (cut out from
+// the July 2026 menu photoset, background removed) — only categories with a
+// genuine matching photo get one, so a few tabs (Beverages, Pizza toppings,
+// Set Menu sides beyond the one shown) are left without one rather than
+// forcing a mismatched image in. `side` alternates right/right/left in the
+// order these appear on the page, per the repeating rhythm requested.
+const CATEGORY_PHOTO_BREAKS: Record<
+  string,
+  { src: string; alt: string; width: number; height: number; side: "left" | "right" }
+> = {
+  "chopsuey-rice": {
+    src: "/images/menu-photos/chopsuey-rice.png",
+    alt: "Seafood chopsuey rice with calamari, mussels and fish",
+    width: 1100,
+    height: 517,
+    side: "right",
   },
-  appetizer: {
-    src: "/images/stock/oysters.jpg",
-    alt: "Shucked oysters with tabasco and lime",
+  "main-dishes": {
+    src: "/images/menu-photos/main-dishes.png",
+    alt: "Grilled seafood platter with prawns, calamari, asparagus and fries",
+    width: 1100,
+    height: 608,
+    side: "right",
+  },
+  "side-dishes-mutton": {
+    src: "/images/menu-photos/side-dishes-mutton.png",
+    alt: "Mutton curry with ginger and coriander",
+    width: 935,
+    height: 1020,
+    side: "left",
+  },
+  "side-dishes-pork": {
+    src: "/images/menu-photos/side-dishes-pork.png",
+    alt: "Black pepper pork with chilli",
+    width: 805,
+    height: 888,
+    side: "right",
   },
   "side-dishes-prawns": {
-    src: "/images/stock/prawns-lobster.jpg",
-    alt: "Grilled prawn in butter sauce",
+    src: "/images/menu-photos/side-dishes-prawns.png",
+    alt: "Hot garlic prawns arranged on a plate",
+    width: 807,
+    height: 698,
+    side: "right",
+  },
+  "from-the-soup-kettle": {
+    src: "/images/menu-photos/from-the-soup-kettle.png",
+    alt: "Cream of chicken soup garnished with parsley",
+    width: 1100,
+    height: 596,
+    side: "left",
+  },
+  "green-salads": {
+    src: "/images/menu-photos/green-salads.png",
+    alt: "Chef's salad with chicken, ham, egg and olives",
+    width: 1100,
+    height: 770,
+    side: "right",
+  },
+  "side-dishes-vegetables": {
+    src: "/images/menu-photos/side-dishes-vegetables.png",
+    alt: "Vegetable chopsuey with baby corn, mushroom and bok choy",
+    width: 767,
+    height: 1100,
+    side: "right",
+  },
+  "italian-flavours": {
+    src: "/images/menu-photos/italian-flavours.png",
+    alt: "Penne pasta with tomato sauce, basil and parmesan",
+    width: 1100,
+    height: 710,
+    side: "left",
   },
   kottu: {
-    src: "/images/seafood-platter-fries.jpg",
-    alt: "A seafood platter with prawns, sausage and French fries",
+    src: "/images/menu-photos/kottu.png",
+    alt: "Chicken kottu with coriander and chilli",
+    width: 659,
+    height: 519,
+    side: "right",
   },
-  snacks: {
-    src: "/images/stock/pastries.jpg",
-    alt: "Golden-baked short eats fresh off the tray at Ranmo",
+  "indian-spicy-flavoures": {
+    src: "/images/menu-photos/indian-spicy-flavoures.png",
+    alt: "Paneer chicken masala with naan bread",
+    width: 1100,
+    height: 585,
+    side: "right",
   },
-  "fresh-juice": {
-    src: "/images/drink-icedtea-table.jpg",
-    alt: "An iced tea beverage garnished with mint, served at a table inside Ranmo",
+  "icecream-imorich": {
+    src: "/images/menu-photos/icecream-imorich.png",
+    alt: "Four Imorich ice cream cones fanned out",
+    width: 1100,
+    height: 626,
+    side: "left",
+  },
+  desserts: {
+    src: "/images/menu-photos/desserts.png",
+    alt: "A slice of chocolate cake with cashews and cardamom",
+    width: 856,
+    height: 980,
+    side: "right",
+  },
+  "side-dishes-omlette": {
+    src: "/images/menu-photos/side-dishes-omlette.png",
+    alt: "A folded omelette garnished with chives",
+    width: 764,
+    height: 712,
+    side: "right",
   },
 };
 
@@ -118,10 +195,15 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
             className="mt-8"
           >
             {categoriesForTab.map((cat) => {
-              const photoBreak = CATEGORY_PHOTO_BREAKS[cat.slug];
+              const dish = CATEGORY_PHOTO_BREAKS[cat.slug];
               return (
-                <div key={cat.slug}>
-                  <div className="mb-10">
+                <div
+                  key={cat.slug}
+                  className={`mb-10 md:flex md:items-start md:gap-10 ${
+                    dish?.side === "left" ? "md:flex-row-reverse" : ""
+                  }`}
+                >
+                  <div className="min-w-0 md:flex-1">
                     <h2 className="font-display text-2xl uppercase tracking-wide text-gold">{cat.boardTitle}</h2>
                     {cat.note && <p className="mt-1 text-sm italic text-cream-dim">{cat.note}</p>}
                     <div className="mt-2">
@@ -130,7 +212,11 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
                       ))}
                     </div>
                   </div>
-                  {photoBreak && <MenuPhotoBreak src={photoBreak.src} alt={photoBreak.alt} />}
+                  {dish && (
+                    <div className="mt-6 shrink-0 md:mt-0 md:w-56 lg:w-64">
+                      <MenuDishImage src={dish.src} alt={dish.alt} width={dish.width} height={dish.height} />
+                    </div>
+                  )}
                 </div>
               );
             })}
