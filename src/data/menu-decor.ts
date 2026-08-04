@@ -18,6 +18,11 @@
 // full-width bleed only reads well above roughly a 1.25 aspect ratio. A
 // 0.6-aspect portrait rendered 960px wide is ~1600px tall, so the clipping
 // window would reveal a sliver of the top rim rather than the dish.
+//
+// The bleed treatment is currently used only by Desserts. The other large
+// bleeds, and both Short Eats & Pastries accents, were removed on request;
+// their source images were deleted with them and are recoverable from git
+// history if any are wanted back.
 
 /** Full-width photo clipped by the bottom edge of its category section. */
 export type BleedAccent = {
@@ -50,10 +55,7 @@ export type CornerAccent = {
 // class must appear verbatim here (not be assembled at runtime from an
 // interpolated variable) or the JIT compiler won't generate the CSS.
 
-// Bleed height tiers, largest to smallest.
-const BLEED_XL = "h-44 sm:h-60 lg:h-80";
 const BLEED_LG = "h-40 sm:h-56 lg:h-72";
-const BLEED_MD = "h-36 sm:h-48 lg:h-64";
 
 // Corner width tiers. Corner accents only appear from `xl` up: the menu
 // column is max-w-5xl (1024px), so below ~1280px viewport there is no page
@@ -75,22 +77,6 @@ export const CORNER_OFFSET: Record<CornerAccent["side"], string> = {
 
 // Wide photos whose dish is cut off by the frame — full-width bottom bleed.
 export const BLEED_ACCENTS: Record<string, BleedAccent> = {
-  // Curry bowl and naan, both running off the top and bottom of the shot.
-  "indian-spicy-flavoures": {
-    src: "/images/menu/paneer-curry-naan.png",
-    width: 725,
-    height: 344,
-    heightClass: BLEED_XL,
-    driftRange: 14,
-  },
-  // Widest of the set; rice bed is sliced by the frame on three sides.
-  "asian-flavour": {
-    src: "/images/menu/fried-rice-seafood.png",
-    width: 707,
-    height: 353,
-    heightClass: BLEED_XL,
-    driftRange: 14,
-  },
   // Two plates, both cut off along the bottom.
   desserts: {
     src: "/images/menu/dessert-tart-icecream.png",
@@ -98,41 +84,11 @@ export const BLEED_ACCENTS: Record<string, BleedAccent> = {
     height: 362,
     heightClass: BLEED_LG,
   },
-  // Plate and fork cropped hard on the top and right.
-  kottu: {
-    src: "/images/menu/kottu-chicken.png",
-    width: 628,
-    height: 397,
-    heightClass: BLEED_LG,
-  },
-  // Bowl sheared flat across the bottom of the frame.
-  "from-the-soup-kettle": {
-    src: "/images/menu/soup-cream.png",
-    width: 604,
-    height: 413,
-    heightClass: BLEED_MD,
-  },
-  // Black plate cut off on the right and top.
-  "side-dishes-chicken": {
-    src: "/images/menu/chicken-crispy-strips.png",
-    width: 569,
-    height: 438,
-    heightClass: BLEED_MD,
-  },
 };
 
 // Whole-plate photos and ingredient cutouts — small margin accents.
 export const CORNER_ACCENTS: Record<string, CornerAccent> = {
   // --- Larger tier: cropped portraits, too tall to bleed full-width. ---
-  "side-dishes-omlette": {
-    src: "/images/menu/omelette-tomato-feta.png",
-    width: 377,
-    height: 661,
-    side: "right",
-    topClass: "-top-8",
-    widthClass: CORNER_LG,
-    driftRange: 20,
-  },
   "side-dishes-fish-thalapath": {
     src: "/images/menu/fish-fillet-fried.png",
     width: 411,
@@ -265,14 +221,6 @@ export const CORNER_ACCENTS: Record<string, CornerAccent> = {
     height: 620,
     side: "left",
     topClass: "-top-3",
-    widthClass: CORNER_XS,
-  },
-  snacks: {
-    src: "/images/menu/decor-basil-coriander-chili.png",
-    width: 288,
-    height: 866,
-    side: "right",
-    topClass: "-top-4",
     widthClass: CORNER_XS,
   },
 };
