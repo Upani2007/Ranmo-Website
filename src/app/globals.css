@@ -55,6 +55,27 @@ h1, h2, h3, h4, h5, h6 {
   outline-offset: 2px;
 }
 
+/*
+ * Depth shadow for the menu photos, sized to each accent tier.
+ *
+ * These used to also draw the white sticker outline, via an SVG alpha
+ * dilation. The artwork now ships with that outline baked into the PNGs, so
+ * drawing it again here would double the ring — only the shadow is left.
+ */
+.menu-sticker {
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.5));
+}
+
+/* Softer shadow for the small ingredient cutouts. */
+.menu-sticker-xs {
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
+}
+
+/* Deeper shadow for the largest accents, so it stays in scale with them. */
+.menu-sticker-lg {
+  filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.55));
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;

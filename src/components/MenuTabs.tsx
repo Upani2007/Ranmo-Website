@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { SERVICE_CHARGE_NOTE } from "@/data/menu";
-import { BLEED_ACCENTS, CORNER_ACCENTS } from "@/data/menu-decor";
+import { CORNER_ACCENTS } from "@/data/menu-decor";
 import { TAB_GROUPS, TAB_GROUP_SLUGS, type MenuCategory, type TabGroup } from "@/data/types";
 import { MenuItemRow } from "./MenuItemRow";
-import { MenuBleedAccent, MenuCornerAccent } from "./MenuPhotoAccent";
+import { MenuCornerAccent } from "./MenuPhotoAccent";
 
 const IMAGE_DISCLAIMER =
   "The images shown are for illustration purposes only and may not be an exact representation.";
@@ -88,7 +88,6 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
           >
             {categoriesForTab.map((cat) => {
               const corner = CORNER_ACCENTS[cat.slug];
-              const bleed = BLEED_ACCENTS[cat.slug];
               return (
                 <div key={cat.slug} className="relative mb-10">
                   {corner && <MenuCornerAccent {...corner} />}
@@ -99,7 +98,6 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
                       <MenuItemRow key={item.name} item={item} />
                     ))}
                   </div>
-                  {bleed && <MenuBleedAccent {...bleed} />}
                 </div>
               );
             })}
