@@ -56,7 +56,7 @@ export default function RootLayout({
         </a>
         <RestaurantSchema />
         <Header />
-        <main id="main-content" className="flex-1">
+        <main id="main-content" className="flex-1 overflow-x-clip">
           {children}
         </main>
         <Footer />

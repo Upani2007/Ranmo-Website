@@ -2,8 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { SERVICE_CHARGE_NOTE } from "@/data/menu";
+import { DISH_ACCENTS, SPRIG_ACCENTS } from "@/data/menu-decor";
 import { TAB_GROUPS, TAB_GROUP_SLUGS, type MenuCategory, type TabGroup } from "@/data/types";
 import { MenuItemRow } from "./MenuItemRow";
+import { MenuPhotoAccent } from "./MenuPhotoAccent";
+
+const IMAGE_DISCLAIMER =
+  "The images shown are for illustration purposes only and may not be an exact representation.";
 
 const SLUG_TO_TAB: Record<string, TabGroup> = Object.fromEntries(
   TAB_GROUPS.map((tab) => [TAB_GROUP_SLUGS[tab], tab])
@@ -81,18 +86,25 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
             hidden={active !== tab}
             className="mt-8"
           >
-            {categoriesForTab.map((cat) => (
-              <div key={cat.slug} className="mb-10">
-                <h2 className="font-display text-2xl uppercase tracking-wide text-gold">{cat.boardTitle}</h2>
-                {cat.note && <p className="mt-1 text-sm italic text-cream-dim">{cat.note}</p>}
-                <div className="mt-2">
-                  {cat.items.map((item) => (
-                    <MenuItemRow key={item.name} item={item} />
-                  ))}
+            {categoriesForTab.map((cat) => {
+              const dishAccent = DISH_ACCENTS[cat.slug];
+              const sprigAccent = SPRIG_ACCENTS[cat.slug];
+              return (
+                <div key={cat.slug} className="relative mb-10">
+                  {dishAccent && <MenuPhotoAccent {...dishAccent} />}
+                  {sprigAccent && <MenuPhotoAccent {...sprigAccent} />}
+                  <h2 className="font-display text-2xl uppercase tracking-wide text-gold">{cat.boardTitle}</h2>
+                  {cat.note && <p className="mt-1 text-sm italic text-cream-dim">{cat.note}</p>}
+                  <div className="mt-2">
+                    {cat.items.map((item) => (
+                      <MenuItemRow key={item.name} item={item} />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             <p className="text-xs text-cream-dim">{SERVICE_CHARGE_NOTE}</p>
+            <p className="mt-1 text-[11px] text-cream-dim/50">{IMAGE_DISCLAIMER}</p>
           </div>
         );
       })}
