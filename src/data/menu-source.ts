@@ -1,11 +1,17 @@
 import "server-only";
 import { unstable_rethrow } from "next/navigation";
-import type { MenuCategory, MenuItem, Price, TabGroup } from "./types";
+import { INDIAN_CATEGORIES, type MenuCategory, type MenuItem, type Price, type SimpleMenuCategory, type TabGroup } from "./types";
 
 // Published Google Sheet (File > Share > Publish to web > CSV). Editing the
 // sheet updates the live site on the next page load — no redeploy needed.
 const MENU_SHEET_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfFEbLn6-aVsdIKNf31fgnOfb5dg-9EBnzdSMIoi2g0SlJJq5rJ58w4dNyOe98AdxvkB1yzgUuVtxF/pub?gid=1608798132&single=true&output=csv";
+
+// The second-floor Indian kitchen's menu — a second tab in the same published
+// spreadsheet (different gid), same six columns. Kept as its own sheet and its
+// own fetch so the two menus never mix.
+const INDIAN_MENU_SHEET_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfFEbLn6-aVsdIKNf31fgnOfb5dg-9EBnzdSMIoi2g0SlJJq5rJ58w4dNyOe98AdxvkB1yzgUuVtxF/pub?gid=1696881426&single=true&output=csv";
 
 // 0 = never cache; every page load fetches the sheet fresh, in both dev and
 // production. Trades away Next's Data Cache (and the reduced Google Sheets
@@ -149,40 +155,64 @@ function mapHeader(headerRow: string[]): Partial<Record<ColumnKey, number>> {
  * the page falls back to an "unavailable" message instead of crashing.
  */
 export async function getMenu(): Promise<MenuCategory[]> {
-  let csvText: string;
+  const csvText = await fetchSheetCsv(MENU_SHEET_CSV_URL, "[menu]");
+  if (csvText == null) return [];
+  return parseMenuCsv(csvText);
+}
+
+/**
+ * Fetches one published sheet as CSV. Returns `null` (already logged) if the
+ * sheet can't be fetched, so callers can fall back to an empty menu instead of
+ * crashing the page.
+ */
+async function fetchSheetCsv(url: string, logPrefix: string): Promise<string | null> {
   try {
-    const res = await fetch(MENU_SHEET_CSV_URL, { next: { revalidate: REVALIDATE_SECONDS } });
+    const res = await fetch(url, { next: { revalidate: REVALIDATE_SECONDS } });
     if (!res.ok) {
-      console.error(`[menu] Failed to fetch menu sheet: HTTP ${res.status}`);
-      return [];
+      console.error(`${logPrefix} Failed to fetch menu sheet: HTTP ${res.status}`);
+      return null;
     }
-    csvText = (await res.text()).replace(/^﻿/, "");
+    return (await res.text()).replace(/^﻿/, "");
   } catch (err) {
     // fetch(..., { next: { revalidate: 0 } }) throws Next's internal
     // DYNAMIC_SERVER_USAGE error during a static-generation attempt to bail
     // the route into dynamic rendering — that's a control-flow signal, not a
     // real failure, and must propagate rather than being swallowed here.
     unstable_rethrow(err);
-    console.error("[menu] Failed to fetch menu sheet:", err);
-    return [];
+    console.error(`${logPrefix} Failed to fetch menu sheet:`, err);
+    return null;
   }
-
-  return parseMenuCsv(csvText);
 }
 
-/** Pure CSV -> MenuCategory[] parser, split out from `getMenu` so it's testable without a network call. */
-export function parseMenuCsv(csvText: string): MenuCategory[] {
+type CollectedRows = {
+  /** Category names in the order they first appear in the sheet. */
+  categoryOrder: string[];
+  itemsByCategory: Map<string, MenuItem[]>;
+};
+
+/**
+ * Shared CSV -> items-by-category pass for both menus: same column mapping,
+ * same blank-price handling, same skip-and-log treatment of malformed rows.
+ * Returns `null` when the sheet is unusable as a whole (no rows, or missing a
+ * required column). What the categories then *mean* — tab groups for the main
+ * menu, a fixed order for the Indian menu — is the caller's business.
+ */
+function collectRows(
+  csvText: string,
+  logPrefix: string,
+  priceNoteWhenUnpriced?: (category: string) => string | undefined
+): CollectedRows | null {
   const rows = parseCsv(csvText);
   if (rows.length === 0) {
-    console.error("[menu] Menu sheet returned no rows");
-    return [];
+    console.error(`${logPrefix} Menu sheet returned no rows`);
+    return null;
   }
 
   const [headerRow, ...dataRows] = rows;
   const columns = mapHeader(headerRow);
   if (columns.category === undefined || columns.itemName === undefined) {
-    console.error('[menu] Menu sheet is missing a required "Category" or "Item Name" column');
-    return [];
+    console.error(`${logPrefix} Menu sheet is missing a required "Category" or "Item Name" column`);
+    return null;
   }
 
   const categoryOrder: string[] = [];
@@ -197,7 +227,7 @@ export function parseMenuCsv(csvText: string): MenuCategory[] {
 
     if (!category || !itemName) {
       if (cols.some((c) => c.trim() !== "")) {
-        console.warn(`[menu] Skipping row ${rowNumber}: missing Category or Item Name`);
+        console.warn(`${logPrefix} Skipping row ${rowNumber}: missing Category or Item Name`);
       }
       return;
     }
@@ -205,7 +235,7 @@ export function parseMenuCsv(csvText: string): MenuCategory[] {
     const small = parsePrice(get("smallPrice"));
     const large = parsePrice(get("largePrice"));
     if (small === "invalid" || large === "invalid") {
-      console.warn(`[menu] Skipping row ${rowNumber} ("${itemName}"): Small/Large Price is not a valid number`);
+      console.warn(`${logPrefix} Skipping row ${rowNumber} ("${itemName}"): Small/Large Price is not a valid number`);
       return;
     }
 
@@ -222,12 +252,12 @@ export function parseMenuCsv(csvText: string): MenuCategory[] {
       price.regular = large;
     }
 
-    const config = CATEGORY_CONFIG[category];
     const description = get("description");
     const item: MenuItem = { name: itemName, price };
     if (description) item.description = description;
-    if (small == null && large == null && config?.priceNoteWhenUnpriced) {
-      item.priceNote = config.priceNoteWhenUnpriced;
+    if (small == null && large == null) {
+      const note = priceNoteWhenUnpriced?.(category);
+      if (note) item.priceNote = note;
     }
 
     if (!itemsByCategory.has(category)) {
@@ -236,6 +266,15 @@ export function parseMenuCsv(csvText: string): MenuCategory[] {
     }
     itemsByCategory.get(category)!.push(item);
   });
+
+  return { categoryOrder, itemsByCategory };
+}
+
+/** Pure CSV -> MenuCategory[] parser, split out from `getMenu` so it's testable without a network call. */
+export function parseMenuCsv(csvText: string): MenuCategory[] {
+  const collected = collectRows(csvText, "[menu]", (category) => CATEGORY_CONFIG[category]?.priceNoteWhenUnpriced);
+  if (!collected) return [];
+  const { categoryOrder, itemsByCategory } = collected;
 
   return categoryOrder.map((category) => {
     const config = CATEGORY_CONFIG[category];
@@ -254,5 +293,47 @@ export function parseMenuCsv(csvText: string): MenuCategory[] {
 
 export async function getMenuItemCount(): Promise<number> {
   const categories = await getMenu();
+  return categories.reduce((sum, cat) => sum + cat.items.length, 0);
+}
+
+/**
+ * Fetches the Indian (second-floor) menu from its own sheet, with the same
+ * always-fresh behaviour and the same tolerance for blank prices and malformed
+ * rows as `getMenu()`.
+ *
+ * Deliberately independent of the main menu: no shared categories, no merging
+ * or deduping. Several category and item names appear in both menus at
+ * different prices, and each menu must show its own.
+ */
+export async function getIndianMenu(): Promise<SimpleMenuCategory[]> {
+  const csvText = await fetchSheetCsv(INDIAN_MENU_SHEET_CSV_URL, "[menu:indian]");
+  if (csvText == null) return [];
+  return parseIndianMenuCsv(csvText);
+}
+
+/** Pure CSV -> SimpleMenuCategory[] parser, split out from `getIndianMenu` so it's testable without a network call. */
+export function parseIndianMenuCsv(csvText: string): SimpleMenuCategory[] {
+  const collected = collectRows(csvText, "[menu:indian]");
+  if (!collected) return [];
+  const { categoryOrder, itemsByCategory } = collected;
+
+  // The Indian menu has no tab-group layer — its categories render directly, in
+  // the printed menu's order. Anything the sheet grows that isn't in that list
+  // still renders (after the known ones) but logs a warning so it can be added.
+  const known = INDIAN_CATEGORIES.filter((category) => itemsByCategory.has(category)) as string[];
+  const unknown = categoryOrder.filter((category) => !INDIAN_CATEGORIES.includes(category as never));
+  unknown.forEach((category) => {
+    console.warn(`[menu:indian] Category "${category}" is not in INDIAN_CATEGORIES; appending it at the end`);
+  });
+
+  return [...known, ...unknown].map((category) => ({
+    slug: slugify(category),
+    boardTitle: category,
+    items: itemsByCategory.get(category)!,
+  }));
+}
+
+export async function getIndianMenuItemCount(): Promise<number> {
+  const categories = await getIndianMenu();
   return categories.reduce((sum, cat) => sum + cat.items.length, 0);
 }

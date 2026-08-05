@@ -37,6 +37,34 @@ export const TAB_GROUPS = [
 
 export type TabGroup = (typeof TAB_GROUPS)[number];
 
+/**
+ * The second-floor Indian kitchen's menu. It is the same business as the main
+ * restaurant but a completely separate menu: category names and item names
+ * overlap with the main menu at different prices (e.g. Vanilla Milkshake), so
+ * the two are never merged, deduped, or grouped together.
+ *
+ * Only 8 categories, so there is no tab-group layer here — these render
+ * directly, in this order.
+ */
+export const INDIAN_CATEGORIES = [
+  "Biryani Special",
+  "Soups",
+  "Curry",
+  "Tandoori & Naan Roti",
+  "Salad",
+  "Fresh Juice & Milkshake",
+  "Desserts",
+  "Hot Beverages",
+] as const;
+
+/** A menu category with no tab grouping — used by the Indian menu. */
+export type SimpleMenuCategory = {
+  slug: string;
+  boardTitle: string;
+  note?: string;
+  items: MenuItem[];
+};
+
 export const TAB_GROUP_SLUGS: Record<TabGroup, string> = {
   "Rice & Noodles": "rice-noodles",
   "Meat & Fish": "meat-fish",

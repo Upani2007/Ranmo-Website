@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { IndianMenu } from "@/components/IndianMenu";
+import { MenuSwitcher } from "@/components/MenuSwitcher";
 import { MenuTabs } from "@/components/MenuTabs";
-import { getMenu, getMenuItemCount } from "@/data/menu-source";
+import { getIndianMenu, getIndianMenuItemCount, getMenu, getMenuItemCount } from "@/data/menu-source";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const count = await getMenuItemCount();
+  const [count, indianCount] = await Promise.all([getMenuItemCount(), getIndianMenuItemCount()]);
   return {
     title: "Menu",
-    description: `The full Ranmo Tea Bar and Restaurant menu — ${count}+ dishes across rice, noodles, seafood, pizza, pasta, and more. Prices in LKR.`,
+    description: `The full Ranmo Tea Bar and Restaurant menu — ${count + indianCount}+ dishes across rice, noodles, seafood, pizza, pasta, and our second-floor Indian kitchen. Prices in LKR.`,
   };
 }
 
 export default async function MenuPage() {
-  const categories = await getMenu();
+  const [categories, indianCategories] = await Promise.all([getMenu(), getIndianMenu()]);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
@@ -31,7 +33,10 @@ export default async function MenuPage() {
       </div>
 
       <div className="mt-10">
-        <MenuTabs categories={categories} />
+        <MenuSwitcher
+          main={<MenuTabs categories={categories} />}
+          indian={<IndianMenu categories={indianCategories} />}
+        />
       </div>
     </div>
   );
