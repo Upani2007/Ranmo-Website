@@ -20,8 +20,8 @@ export const SITE = {
     href: "https://wa.me/94712111888",
   },
   hours: {
-    display: "6:30 AM – 10:00 PM, daily",
-    opens: "06:30",
+    display: "10:00 AM – 10:00 PM, daily",
+    opens: "10:00",
     closes: "22:00",
   },
   map: {

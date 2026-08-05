@@ -48,7 +48,7 @@ export default function AboutPage() {
               among them. And running through all of it is the Ranmo Special Tea program, brewed the way a
               proper tea bar should.
             </p>
-            <p>Open daily, 6:30 AM to 10:00 PM.</p>
+            <p>Open daily, 10:00 AM to 10:00 PM.</p>
           </div>
           <PrimaryCtaRow className="mt-10" />
         </Reveal>
