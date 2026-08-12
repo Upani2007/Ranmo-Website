@@ -57,4 +57,11 @@ export const TESTIMONIALS: Testimonial[] = [
     relativeDate: "a year ago",
     text: "I recently visited Ranmo Tea Bar and Restaurant and had a fantastic experience. The place is clean and well-kept, creating a calm and relaxing atmosphere. One of the best things about it is the awesome view — you can enjoy your meal while overlooking the beach and the nearby railway line, which adds a unique charm to the setting. The food was delicious, with a variety of tasty bites available on their menu to suit all kinds of cravings. Their service is also top-notch — very friendly and welcoming staff who make you feel right at home.",
   },
+  {
+    // Name reproduced as it appears on the review, in caps.
+    author: "UMAYANGA SATHSARANI",
+    rating: 4,
+    relativeDate: "3 weeks ago",
+    text: "We ordered lunch packets from this restaurant for our office event, and the experience was excellent! The food was fresh, flavorful, and well-packed, making it easy to serve and enjoy. Everyone appreciated the generous portions and the variety offered. Delivery was punctual, and the team handled everything professionally, ensuring our event went smoothly. Highly recommended for anyone looking for quality meals and reliable service for group orders!",
+  },
 ];
