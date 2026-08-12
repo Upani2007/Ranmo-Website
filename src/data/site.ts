@@ -129,23 +129,8 @@ export const GALLERY_IMAGES = [
   },
 ] as const;
 
-export const REVIEWS_PLACEHOLDER = [
-  {
-    author: "Google review",
-    rating: 5,
-    text: "The lagoon view from the dining room is unbeatable, and the food is worth the trip alone.",
-  },
-  {
-    author: "Google review",
-    rating: 5,
-    text: "Great tea, great setting right by the railway line. Mongolian noodles were excellent.",
-  },
-  {
-    author: "Google review",
-    rating: 4,
-    text: "Big menu, friendly service. Come hungry — the platters are made for sharing.",
-  },
-];
+// Reviews are no longer hardcoded — they come live from the Google Business
+// Profile via the Places API. See src/lib/googleReviews.ts.
 
 export const NAV_LINKS = [
   { href: "/", label: "Home" },

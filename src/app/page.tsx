@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PrimaryCtaRow } from "@/components/CtaButtons";
 import { MapEmbed } from "@/components/MapEmbed";
-import { ReviewSnippet } from "@/components/ReviewSnippet";
+import { Testimonials } from "@/components/Testimonials";
 import { Reveal } from "@/components/Reveal";
 import { SIGNATURE_DISHES, SITE } from "@/data/site";
 import { ClockIcon, MapPinIcon } from "@/components/icons";
@@ -111,12 +111,8 @@ export default function HomePage() {
         </Reveal>
       </section>
 
-      {/* Reviews */}
-      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
-        <Reveal>
-          <ReviewSnippet />
-        </Reveal>
-      </section>
+      {/* Curated guest reviews — brings its own section wrapper. */}
+      <Testimonials />
     </>
   );
 }
