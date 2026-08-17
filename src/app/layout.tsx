@@ -21,7 +21,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ranmo.example.com"),
+  metadataBase: new URL(SITE.url),
   title: {
     default: `${SITE.name} | Kalutara South`,
     template: `%s | ${SITE.name}`,
@@ -31,6 +31,8 @@ export const metadata: Metadata = {
     "Ranmo",
     "Kalutara restaurant",
     "Chinese-fusion Sri Lanka",
+    "Indian restaurant Kalutara",
+    "pizza and pasta Kalutara",
     "tea bar Kalutara",
     "Galle Road restaurant",
   ],
@@ -38,6 +40,7 @@ export const metadata: Metadata = {
     title: SITE.name,
     description: SITE.description,
     siteName: SITE.name,
+    url: SITE.url,
     locale: "en_LK",
     type: "website",
   },

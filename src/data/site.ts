@@ -1,19 +1,30 @@
 export const SITE = {
   name: "Ranmo Tea Bar and Restaurant",
   shortName: "Ranmo",
+  // Canonical production origin. Every absolute URL on the site (metadataBase,
+  // sitemap, robots, structured data) derives from this — don't hardcode it again.
+  url: "https://ranmorest.wimaltea.com",
   tagline: "Sri Lankan tea-bar heritage, served lagoon-side.",
   description:
-    "Ranmo Tea Bar and Restaurant sits on a lagoon in Kalutara South, with a coastal railway line running right alongside the dining room. Known for Chinese-fusion mains and a full Ranmo Special Tea program.",
+    "Ranmo Tea Bar and Restaurant sits lagoon-side in Kalutara South, with a coastal railway line running right alongside the dining room — Chinese-fusion mains, seafood, kottu, pizza and pasta, short eats and the Ranmo Special Tea program, plus a second-floor Indian restaurant.",
   address: {
     line1: "#362 Galle Road",
     line2: "Kalutara South",
     country: "Sri Lanka",
     full: "#362 Galle Road, Kalutara South, Sri Lanka",
   },
+  // `phone` is the primary number — it's what the Call/WhatsApp CTAs and the
+  // form fallback messages use. `phoneAlt` is the landline, listed alongside it
+  // wherever contact details are shown in full (footer, Location page).
   phone: {
     display: "071 2 111 888",
     href: "tel:+94712111888",
     e164: "+94712111888",
+  },
+  phoneAlt: {
+    display: "034 222 0488",
+    href: "tel:+94342220488",
+    e164: "+94342220488",
   },
   whatsapp: {
     // Same number as the printed phone; update if the client has a dedicated WhatsApp Business number.
@@ -31,11 +42,9 @@ export const SITE = {
     directionsHref:
       "https://www.google.com/maps/dir/?api=1&destination=Ranmo+Tea+Bar+and+Restaurant,+362+Galle+Road,+Kalutara+South,+Sri+Lanka",
   },
-  social: {
-    // Placeholders — client has not yet confirmed active handles.
-    facebook: null as string | null,
-    instagram: null as string | null,
-  },
+  // No `social` block: the client has not confirmed active Facebook/Instagram
+  // handles. Add one back (and a `sameAs` entry in RestaurantSchema) once there
+  // are real URLs to link to — dead placeholder links are worse than none.
   priceRange: "$$",
 };
 

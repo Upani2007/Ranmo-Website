@@ -39,9 +39,12 @@ export default function LocationPage() {
               <PhoneIcon className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
               <div>
                 <dt className="text-sm font-medium text-cream-dim">Phone</dt>
-                <dd>
-                  <a href={SITE.phone.href} className="text-cream hover:text-gold">
+                <dd className="space-y-1">
+                  <a href={SITE.phone.href} className="block text-cream hover:text-gold">
                     {SITE.phone.display}
+                  </a>
+                  <a href={SITE.phoneAlt.href} className="block text-cream hover:text-gold">
+                    {SITE.phoneAlt.display}
                   </a>
                 </dd>
               </div>

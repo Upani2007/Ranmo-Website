@@ -16,15 +16,6 @@ export function Footer() {
             className="h-12 w-auto"
           />
           <p className="mt-4 max-w-xs text-sm text-cream-dim">{SITE.description}</p>
-          <div className="mt-4 flex gap-4 text-sm text-cream-dim">
-            {/* Social handles not yet confirmed by the client — placeholders only. */}
-            <span aria-disabled="true" className="cursor-not-allowed opacity-50">
-              Facebook
-            </span>
-            <span aria-disabled="true" className="cursor-not-allowed opacity-50">
-              Instagram
-            </span>
-          </div>
         </div>
 
         <div>
@@ -44,9 +35,15 @@ export function Footer() {
             </li>
             <li className="flex items-start gap-2">
               <PhoneIcon className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-              <a href={SITE.phone.href} className="hover:text-gold">
-                {SITE.phone.display}
-              </a>
+              <span>
+                <a href={SITE.phone.href} className="hover:text-gold">
+                  {SITE.phone.display}
+                </a>
+                <br />
+                <a href={SITE.phoneAlt.href} className="hover:text-gold">
+                  {SITE.phoneAlt.display}
+                </a>
+              </span>
             </li>
           </ul>
         </div>

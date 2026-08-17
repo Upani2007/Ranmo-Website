@@ -5,10 +5,11 @@ export function RestaurantSchema() {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     name: SITE.name,
-    image: "https://ranmo.example.com/images/hero-storefront.jpg",
-    servesCuisine: ["Sri Lankan", "Chinese", "Seafood", "Bakery"],
+    url: SITE.url,
+    image: `${SITE.url}/images/hero-storefront.jpg`,
+    servesCuisine: ["Sri Lankan", "Chinese", "Indian", "Italian", "Seafood", "Bakery"],
     priceRange: SITE.priceRange,
-    telephone: SITE.phone.e164,
+    telephone: [SITE.phone.e164, SITE.phoneAlt.e164],
     address: {
       "@type": "PostalAddress",
       streetAddress: SITE.address.line1,
@@ -29,7 +30,7 @@ export function RestaurantSchema() {
       opens: SITE.hours.opens,
       closes: SITE.hours.closes,
     },
-    hasMenu: "https://ranmo.example.com/menu",
+    hasMenu: `${SITE.url}/menu`,
     acceptsReservations: "True",
   };
 
