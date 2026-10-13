@@ -47,16 +47,42 @@ const CATEGORY_CONFIG: Record<string, { tabGroup: TabGroup; note?: string; price
   "Italian Flavours": { tabGroup: "Pizza & Pasta" },
   Pizza: { tabGroup: "Pizza & Pasta" },
   Snacks: { tabGroup: "Short Eats & Pastries" },
-  "Side Dishes - Omlette": { tabGroup: "Short Eats & Pastries" },
-  "Indian Spicy Flavoures": { tabGroup: "Set Menu & Sides" },
+  "Side Dishes - Omelette": { tabGroup: "Short Eats & Pastries" },
+  "Indian Spicy Flavours": { tabGroup: "Set Menu & Sides" },
   "Fresh Juice": { tabGroup: "Beverages" },
-  "Milk Shake": { tabGroup: "Beverages" },
-  "Ranmo Special Hot Drinks": { tabGroup: "Beverages" },
+  Milkshake: { tabGroup: "Beverages" },
+  "Hot Drinks": { tabGroup: "Beverages" },
   "Icecream - Elephant House": { tabGroup: "Desserts" },
   "Icecream - Imorich": { tabGroup: "Desserts" },
   Desserts: { tabGroup: "Desserts" },
   "Waffle Sunday": { tabGroup: "Desserts" },
 };
+
+// Spelling corrections applied to every category name, item name and
+// description as it comes out of the sheet. The sheet is maintained by the
+// kitchen and still carries the older spellings; rather than depend on it
+// being re-typed correctly, the site normalises them on the way in. Each
+// pattern is keyed to the *wrong* spelling, so once a cell is corrected in
+// the sheet the matching rule simply stops firing — nothing to undo here.
+const SPELLING_FIXES: ReadonlyArray<readonly [RegExp, string]> = [
+  [/\bLime\s*&\s*Sprite\s+Drink\b/g, "Mojito"],
+  [/\bMilk\s+Shake\b/g, "Milkshake"],
+  [/\bmilk\s+shake\b/g, "milkshake"],
+  [/\bOmlett?e?\b/g, "Omelette"],
+  [/\bomlett?e?\b/g, "omelette"],
+  [/\bRanmo\s+Special\s+Hot\s+Drinks\b/g, "Hot Drinks"],
+  [/\bWaffle\s*corn\b/g, "Wafflecone"],
+  [/\bwaffle\s*corn\b/g, "wafflecone"],
+  [/\bAddable\b/g, "Edible"],
+  [/\baddable\b/g, "edible"],
+  [/\bFlavoures\b/g, "Flavours"],
+  [/\bflavoures\b/g, "flavours"],
+];
+
+/** Applies `SPELLING_FIXES` to one field of sheet text. */
+function fixSpelling(value: string): string {
+  return SPELLING_FIXES.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), value);
+}
 
 type ColumnKey = "category" | "itemName" | "description" | "smallPrice" | "largePrice" | "available";
 
@@ -222,8 +248,8 @@ function collectRows(
     const rowNumber = i + 2; // +1 for the header row, +1 for 1-indexing
     const get = (key: ColumnKey) => (columns[key] !== undefined ? (cols[columns[key]!] ?? "").trim() : "");
 
-    const category = get("category");
-    const itemName = get("itemName");
+    const category = fixSpelling(get("category"));
+    const itemName = fixSpelling(get("itemName"));
 
     if (!category || !itemName) {
       if (cols.some((c) => c.trim() !== "")) {
@@ -252,7 +278,7 @@ function collectRows(
       price.regular = large;
     }
 
-    const description = get("description");
+    const description = fixSpelling(get("description"));
     const item: MenuItem = { name: itemName, price };
     if (description) item.description = description;
     if (small == null && large == null) {

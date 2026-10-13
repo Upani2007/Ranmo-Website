@@ -138,8 +138,7 @@ export const GALLERY_IMAGES = [
   },
 ] as const;
 
-// Reviews are no longer hardcoded — they come live from the Google Business
-// Profile via the Places API. See src/lib/googleReviews.ts.
+// Homepage testimonials live in src/data/testimonials.ts.
 
 export const NAV_LINKS = [
   { href: "/", label: "Home" },
