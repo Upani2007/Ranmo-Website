@@ -36,11 +36,11 @@ export function Footer() {
             <li className="flex items-start gap-2">
               <PhoneIcon className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
               <span>
-                <a href={SITE.phone.href} className="hover:text-gold">
+                <a href={SITE.phone.href} className="inline-block py-1 hover:text-gold">
                   {SITE.phone.display}
                 </a>
                 <br />
-                <a href={SITE.phoneAlt.href} className="hover:text-gold">
+                <a href={SITE.phoneAlt.href} className="inline-block py-1 hover:text-gold">
                   {SITE.phoneAlt.display}
                 </a>
               </span>

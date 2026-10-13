@@ -102,7 +102,7 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
               );
             })}
             <p className="text-xs text-cream-dim">{SERVICE_CHARGE_NOTE}</p>
-            <p className="mt-1 text-[11px] text-cream-dim/50">{IMAGE_DISCLAIMER}</p>
+            <p className="mt-1 text-[11px] text-cream-dim/70">{IMAGE_DISCLAIMER}</p>
           </div>
         );
       })}
