@@ -3,7 +3,7 @@ export const SITE = {
   shortName: "Ranmo",
   // Canonical production origin. Every absolute URL on the site (metadataBase,
   // sitemap, robots, structured data) derives from this — don't hardcode it again.
-  url: "https://ranmorest.wimaltea.com",
+  url: "https://ranmorestaurant.com",
   tagline: "Sri Lankan tea-bar heritage, served lagoon-side.",
   description:
     "Ranmo Tea Bar and Restaurant sits lagoon-side in Kalutara South, with a coastal railway line running right alongside the dining room — Chinese-fusion mains, seafood, kottu, pizza and pasta, short eats and the Ranmo Special Tea program, plus a second-floor Indian restaurant.",
@@ -148,4 +148,5 @@ export const NAV_LINKS = [
   { href: "/gallery", label: "Gallery" },
   { href: "/location", label: "Location" },
   { href: "/reservations", label: "Reservations" },
+  { href: "/careers", label: "Careers" },
 ];

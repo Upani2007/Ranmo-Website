@@ -58,3 +58,30 @@ export function PrimaryCtaRow({ className = "" }: { className?: string }) {
     </div>
   );
 }
+
+// Recruitment line — comes from the Careers sheet per role, deliberately NOT
+// SITE.phone, which is the restaurant's customer-facing number.
+export function ApplyCallButton({ e164, display, role, className = "" }: { e164: string; display: string; role: string; className?: string }) {
+  return (
+    <a href={`tel:+${e164}`} aria-label={`Call ${display} to apply for ${role}`} className={`${base} ${variants.primary} ${className}`}>
+      <PhoneIcon className="h-4 w-4" />
+      Call {display}
+    </a>
+  );
+}
+
+export function ApplyWhatsAppButton({ e164, role, className = "" }: { e164: string; role: string; className?: string }) {
+  const text = encodeURIComponent(`Hi, I'd like to apply for the ${role} position at Ranmo.`);
+  return (
+    <a
+      href={`https://wa.me/${e164}?text=${text}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Apply for ${role} on WhatsApp (opens in a new tab)`}
+      className={`${base} ${variants.outline} ${className}`}
+    >
+      <WhatsAppIcon className="h-4 w-4" />
+      Apply on WhatsApp
+    </a>
+  );
+}

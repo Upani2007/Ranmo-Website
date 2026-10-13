@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
+  // "./" resolves against metadataBase per route, so every page gets its own
+  // canonical on the production domain (and not a copy of the homepage's).
+  alternates: { canonical: "./" },
   keywords: [
     "Ranmo",
     "Kalutara restaurant",
