@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getJobs, type JobListing } from "@/data/careers-source";
 import { SITE } from "@/data/site";
 import { ApplyCallButton, ApplyWhatsAppButton } from "@/components/CtaButtons";
@@ -86,25 +87,41 @@ export default async function CareersPage() {
         below and get in touch to apply.
       </p>
 
-      {jobs && (
-        <section className="mt-12" aria-labelledby="vacancies-heading">
-          <h2 id="vacancies-heading" className="font-display text-2xl uppercase tracking-wide text-gold">
-            Current Vacancies
-          </h2>
-          {jobs.length > 0 ? (
-            <div className="mt-6 space-y-6">
-              {jobs.map((job) => (
-                <JobCard key={`${job.role}-${job.posted ?? ""}`} job={job} />
-              ))}
-            </div>
-          ) : (
-            <p className="mt-4 text-cream-dim">
-              There are no open positions right now &mdash; please check back soon.
-            </p>
-          )}
-          <JobPostingSchema jobs={jobs} />
-        </section>
-      )}
+      <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
+        {jobs && (
+          <section aria-labelledby="vacancies-heading">
+            <h2 id="vacancies-heading" className="font-display text-2xl uppercase tracking-wide text-gold">
+              Current Vacancies
+            </h2>
+            {jobs.length > 0 ? (
+              <div className="mt-6 space-y-6">
+                {jobs.map((job) => (
+                  <JobCard key={`${job.role}-${job.posted ?? ""}`} job={job} />
+                ))}
+              </div>
+            ) : (
+              <p className="mt-4 text-cream-dim">
+                There are no open positions right now &mdash; please check back soon.
+              </p>
+            )}
+            <JobPostingSchema jobs={jobs} />
+          </section>
+        )}
+
+        {/* Supporting branding only — the listings above are the real content.
+            Sits after the text in the DOM so it never leads for screen readers. */}
+        <aside className={`mx-auto w-full max-w-sm lg:sticky lg:top-24 ${jobs ? "" : "lg:col-start-1"}`}>
+          <Image
+            src="/images/careers-poster.jpg"
+            alt="Ranmo Tea Bar and Restaurant now hiring a Restaurant Supervisor cum Steward. Contact 077 790 5705."
+            width={1080}
+            height={1080}
+            sizes="(min-width: 1024px) 340px, (min-width: 640px) 384px, 90vw"
+            loading="lazy"
+            className="h-auto w-full rounded-2xl border border-white/10"
+          />
+        </aside>
+      </div>
 
       <section className="mt-16" aria-labelledby="why-heading">
         <h2 id="why-heading" className="font-display text-2xl uppercase tracking-wide text-gold">
