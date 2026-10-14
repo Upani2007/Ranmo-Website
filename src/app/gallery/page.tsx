@@ -34,7 +34,6 @@ export default function GalleryPage() {
             height={720}
             controls
             playsInline
-            muted
             preload="none"
             poster="/images/ranmo-gallery-poster.webp"
             aria-label="Video tour of Ranmo Tea Bar and Restaurant"
