@@ -20,11 +20,14 @@ export default function GalleryPage() {
         <Gallery />
       </div>
 
-      <section className="mt-16" aria-labelledby="gallery-video-heading">
+      <section
+        className="mt-16 rounded-2xl border border-gold/40 bg-gradient-to-br from-gold/15 via-gold/5 to-transparent p-5 shadow-[0_0_40px_-12px_rgba(217,164,65,0.35)] sm:p-8"
+        aria-labelledby="gallery-video-heading">
         <h2 id="gallery-video-heading" className="font-display text-2xl uppercase text-cream sm:text-3xl">
           Watch
         </h2>
-        <div className="mt-6 aspect-video w-full max-w-4xl overflow-hidden rounded-lg bg-charcoal-light">
+        <div className="mt-3 h-px w-16 bg-gold" aria-hidden="true" />
+        <div className="mt-6 aspect-video w-full max-w-4xl overflow-hidden rounded-lg bg-charcoal-light ring-1 ring-gold/50">
           <video
             className="h-full w-full object-cover"
             width={1280}
