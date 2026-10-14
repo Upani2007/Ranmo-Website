@@ -19,6 +19,28 @@ export default function GalleryPage() {
       <div className="mt-10">
         <Gallery />
       </div>
+
+      <section className="mt-16" aria-labelledby="gallery-video-heading">
+        <h2 id="gallery-video-heading" className="font-display text-2xl uppercase text-cream sm:text-3xl">
+          Watch
+        </h2>
+        <div className="mt-6 aspect-video w-full max-w-4xl overflow-hidden rounded-lg bg-charcoal-light">
+          <video
+            className="h-full w-full object-cover"
+            width={1280}
+            height={720}
+            controls
+            playsInline
+            muted
+            preload="none"
+            poster="/images/ranmo-gallery-poster.webp"
+            aria-label="Video tour of Ranmo Tea Bar and Restaurant"
+          >
+            <source src="/video/ranmo-gallery-video.mp4" type="video/mp4" />
+            Your browser does not support HTML5 video.
+          </video>
+        </div>
+      </section>
     </div>
   );
 }
