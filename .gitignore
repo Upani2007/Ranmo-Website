@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# one-off exports of the live menu sheet (source of truth is the Google Sheet)
+menu-export.csv
